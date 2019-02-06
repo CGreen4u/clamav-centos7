@@ -27,7 +27,26 @@ s/#DetectBrokenExecutables/DetectBrokenExecutables/g; \
 ' /etc/clamd.d/scan.conf \
 \
 && ln -s /etc/clamd.d/scan.conf /etc/clamd.conf
-VOLUME ["/var/lib/clamav"]
-EXPOSE 3310
-ENTRYPOINT ["clamd"]
-CMD []
+
+# Update ClamAV Definitions
+RUN mkdir -p /opt/malice \
+  && chown malice /opt/malice \
+  && freshclam
+
+# Add EICAR Test Virus File to malware folder
+ADD http://www.eicar.org/download/eicar.com.txt /malware/EICAR
+
+RUN chown malice -R /malware
+
+WORKDIR /malware
+
+ENTRYPOINT ["/bin/avscan"]
+CMD ["--help"]
+
+
+#VOLUME ["/var/lib/clamav"]
+#EXPOSE 3310
+#ENTRYPOINT ["clamd"]
+#CMD []
+
+
