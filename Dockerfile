@@ -1,6 +1,15 @@
 #clamav
 
 FROM centos:7
+
+
+LABEL malice.plugin.repository = "https://github.com/malice-plugins/clamav.git"
+LABEL malice.plugin.category="av"
+LABEL malice.plugin.mime="*"
+LABEL malice.plugin.docker.engine="*"
+
+
+
 #install clamav and edit script out
 RUN rpm --import http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
 && yum -y install epel-release \
